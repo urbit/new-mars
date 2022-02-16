@@ -9,7 +9,7 @@
 ::
 ::  The @tas tag is used only for debugging
 +$  jute
-  (map * (list [sock [$-(* *) @tas]]))
+  (map * (list (pair sock (pair gate @tas))))
 ++  bord  *jute
 ::
 ::  +mous: test whether a sock nests in another sock
@@ -44,18 +44,13 @@
 ::  Check for a jet
 ++  juke
   |=  [=jute s=sock f=*]
-  ^-  (unit [$-(* *) @tas])
-  =/  jets
-    =/  j  (~(get by jute) f)
-    ^-  (list [sock [$-(* *) @tas]])
-    ?~  j  ~  u.j
-  |-
-  ^-  (unit [$-(* *) @tas])
+  =/  jets  ?~(j=(~(get by jute) f) ~ u.j)
+  |-  ^-  (unit (pair gate @tas))
   ?~  jets
     ~
-  ?:  (mous -<.jets s)
-    `->.jets
-  $(jets +.jets)
+  ?:  (mous p.i.jets s)
+    `q.i.jets
+  $(jets t.jets)
 ::  learn a noun at an address
 ::
 ++  darn
@@ -430,8 +425,8 @@
     =/  jet  (juke jute s k.f)
     ?.  ?=  ~  jet
       ::  found a jet
-      ~&  "Jet: {<+.u.jet>}"
-      [[%jet +.u.jet] memo]
+      ~&  "jet: {<q.u.jet>}"
+      [[%jet q.u.jet] memo]
     =/  mem  (~(get by memo) [s k.f])
     ?~  mem
       :: memo miss
