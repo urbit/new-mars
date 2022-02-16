@@ -381,35 +381,8 @@
   |=  [=jute s=sock f=*]
   ^-  [foot _memo]
   =/  labl  [s f]
-  |-
+  |^
   ^-  [foot _memo]
-  =/  sockf
-    |=  [s=sock f=sock]
-    ^-  [coot _memo]
-    ?.  ?=  [%know *]  f
-      ~&  "Dyn: {<s>}"
-      [[%dyn s] memo]
-    =/  jet  (juke jute s k.f)
-    ?.  ?=  ~  jet
-      ::  found a jet
-      ~&  "Jet: {<+.u.jet>}"
-      [[%jet +.u.jet] memo]
-    =/  mem  (~(get by memo) [s k.f])
-    ?~  mem
-      :: memo miss
-      =.  memo  (~(put by memo) [s k.f] [~ ~]) :: blackhole for recursive eval
-      =.  labl  [s k.f]
-      =^  res  memo  ^$(s s, f k.f)
-      ~&  "Miss: sock {<s>} formula {<k.f>}"
-      =.  memo  (~(jab by memo) [s k.f] |=([(unit sock) nam=(unit @tas)] [`r.res nam]))
-      [[%mis res] memo] :: fill in result
-    ?~  -.u.mem
-      :: memo blackhole
-      ~&  "Recur: sock {<[s]>} formula {<k.f>}"
-      [[%rec s k.f] memo]
-    :: memo hit
-    ~&  "Hit: sock {<[s]>} formula {<k.f>} result {<u.u.mem>}"
-    [[%hit u.-.u.mem] memo] 
   ?+  f  ~|  "Unrecognized nock {<f>}"  ~|  %pull-bonk  !!
       ::
       [[* *] *]
@@ -519,7 +492,7 @@
       =^  dfoot  memo  ^$(f d.f)
       [[[%11 [b.f cfoot] dfoot] s r.dfoot] memo]
     ?:  &(=(b.f %fast) ?=([%1 @ *] c.f))
-      ~&  "%fast hint {<+<.c.f>}"
+      ~&  "%fast hint {<(,@tas +<.c.f)>}"
       ~|  "labl {<labl>} does not go to black hole"
       ?>  =((~(get by memo) labl) [~ [~ ~]])
       =.  memo  (~(put by memo) labl [~ `+<.c.f])
@@ -533,6 +506,35 @@
     =^  pathfoot  memo  $(f path.f)
     [[[%12 reffoot pathfoot] s [%gues ~]] memo]
   ==
+  ::
+  ++  sockf
+    |=  [s=sock f=sock]
+    ^-  [coot _memo]
+    ?.  ?=  [%know *]  f
+      ~&  "Dyn: {<s>}"
+      [[%dyn s] memo]
+    =/  jet  (juke jute s k.f)
+    ?.  ?=  ~  jet
+      ::  found a jet
+      ~&  "Jet: {<+.u.jet>}"
+      [[%jet +.u.jet] memo]
+    =/  mem  (~(get by memo) [s k.f])
+    ?~  mem
+      :: memo miss
+      =.  memo  (~(put by memo) [s k.f] [~ ~]) :: blackhole for recursive eval
+      =.  labl  [s k.f]
+      =^  res  memo  ^$(s s, f k.f)
+      ~&  "Miss: sock {<s>} formula {<k.f>}"
+      =.  memo  (~(jab by memo) [s k.f] |=([(unit sock) nam=(unit @tas)] [`r.res nam]))
+      [[%mis res] memo] :: fill in result
+    ?~  -.u.mem
+      :: memo blackhole
+      ~&  "Recur: sock {<[s]>} formula {<k.f>}"
+      [[%rec s k.f] memo]
+    :: memo hit
+    ~&  "Hit: sock {<[s]>} formula {<k.f>} result {<u.u.mem>}"
+    [[%hit u.-.u.mem] memo]
+  --
 ::  example nocks for testing
 ++  nocs
   |%
