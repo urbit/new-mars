@@ -353,13 +353,7 @@
       [%5 b=* c=*]
     =^  bfoot  memo  $(f b.f)
     =^  cfoot  memo  $(f c.f)
-    =/  r
-      ?:  ?=  [%know *]  r.bfoot
-        ?:  ?=  [%know *]  r.cfoot
-          [%know =(k.r.bfoot k.r.cfoot)]
-        [%gues ~]
-      [%gues ~]
-    [[[%5 bfoot cfoot] s r] memo]
+    [[[%5 bfoot cfoot] s (pear r.bfoot r.cfoot)] memo]
       ::
       [%6 b=* c=* d=*]
     =^  bfoot  memo  $(f b.f)
