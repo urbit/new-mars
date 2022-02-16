@@ -1,16 +1,77 @@
-=<
-::  a memoization for formula analysis, updated/inspected at eval
-::  boundaries (2/9)
-=|  memo=(map [sock *] [(unit sock) (unit @tas)])
 |%
-::  Partial knowledge of a noun
-+$  sock  ^sock
-::  A jet dashboard
+::  $coot: description of knowledge at a call site
+::  $foot: annotated Nock tree with subject knowledge
+::  $jute: a jet dashboard
+::  $sock: partial knowledge of a noun
 ::
-::  The @tas tag is used only for debugging
-+$  jute
-  (map * (list (pair sock (pair gate @tas))))
++$  coot
+  $%  ::  %dyn: don't know the formula;
+      ::        generate a full eval: check cache or codegen,
+      ::        guard on stored sock
+      ::  %mis: know the formula, not memoized;
+      ::        do a fresh inline codegen with a new label
+      ::  %rec: a recursive call, memo table has a blackhole
+      ::  %hit: a recognized call, memo table has an entry
+      ::  %jet: jump to a statically known jet
+      ::
+      ::    %rec and %hit both mean we will generate jumps to labels;
+      ::    they differ because for %rec the analysis must treat the call as
+      ::    unknowable, while for %hit we do not re-analyze the call but return
+      ::    the memoized sock
+      ::
+      [%dyn =sock]
+      [%mis =foot]
+      [%rec =sock f=*]
+      [%hit res=sock]
+      [%jet jet=@tas]  :: XX s/b path
+  ==
+::
++$  foot
+  $:  $%  [%1 b=*]
+          [%2 b=foot c=foot =coot]
+          [%3 b=foot]
+          [%4 b=foot]
+          [%5 b=foot c=foot]
+          [%6 b=foot c=(unit foot) d=(unit foot)]
+          [%7 b=foot c=foot]
+          [%8 b=foot c=foot]
+          [%9 b=@ c=foot =coot]
+          [%10 [b=@ c=foot] d=foot]
+          [%11 b=@ c=foot]
+          [%11 [b=@ c=foot] d=foot]
+          [%12 ref=foot path=foot]
+          [%cell p=foot q=foot]
+          [%0 b=@]
+        ==
+    s=sock
+    r=sock
+  ==
+::
++$  jute  (map * (list (pair sock (pair gate @tas))))
+::
++$  sock
+  $%  [%know k=*]
+      [%bets p=sock q=sock]
+      [%gues ~]
+  ==
+--
+::
+|%
++|  %jet-opts
+::
 ++  bord  *jute
+::  Check for a jet
+++  juke
+  |=  [=jute s=sock f=*]
+  =/  jets  ?~(j=(~(get by jute) f) ~ u.j)
+  |-  ^-  (unit (pair gate @tas))
+  ?~  jets
+    ~
+  ?:  (mous p.i.jets s)
+    `q.i.jets
+  $(jets t.jets)
+::
++|  %sock-opts
 ::
 ::  +mous: test whether a sock nests in another sock
 ::
@@ -41,16 +102,6 @@
                    $(a p.a, b p.b)
                    $(a q.a, b q.b)
   ==       ==  ==
-::  Check for a jet
-++  juke
-  |=  [=jute s=sock f=*]
-  =/  jets  ?~(j=(~(get by jute) f) ~ u.j)
-  |-  ^-  (unit (pair gate @tas))
-  ?~  jets
-    ~
-  ?:  (mous p.i.jets s)
-    `q.i.jets
-  $(jets t.jets)
 ::  learn a noun at an address
 ::
 ++  darn
@@ -140,8 +191,25 @@
     %gues  a
   ==
 ::
+++  cort
+  |=  =coot
+  ^-  sock
+  ?-  -.coot
+    %dyn  [%gues ~]
+    %mis  r.foot.coot
+    %rec  [%gues ~]
+    %hit  res.coot
+    %jet  [%gues ~]
+  ==
+::
++|  %analyses
+::
 ::  Compute what we know of a Nock formula's result
 ++  wash
+  ::  a memoization for formula analysis, updated/inspected at eval
+  ::  boundaries (2/9)
+  =|  memo=(map [sock *] [(unit sock) (unit @tas)])
+  ::
   |=  [s=sock f=*]
   ^-  [sock _memo]
   |-
@@ -244,64 +312,12 @@
     =^  pres  memo  $(f path.f)
     [[%gues ~] memo]
   ==
-::  Description of knowledge at a call site
 ::
-::  Codegen behavior
-::  %dyn means we will generate a full eval: check cache or codegen,
-::  guard on stored sock
-::
-::  %mis means we will do fresh inline codegen of a formula with a new
-::  label
-::
-::  %rec and %hit both mean we will generate to jumps to labels
-::  They differ because for %rec the analysis must treat the call as
-::  unknowable, while for %hit we do not re-analyze the call but return
-::  the memoized sock
-::
-::  %jet corresponds to a jump to a jet
-+$  coot
-  $%
-    [%dyn =sock]     :: we don't know the formula
-    [%mis =foot]     :: we know the formula, it's not memoized
-    [%rec =sock f=*] :: a recursive call, the memo table has a blackhole for this sock/formula pair
-    [%hit res=sock]  :: a memoized call, the memo table has an entry for this sock/formula pair
-    [%jet jet=@tas]  :: call would be jetted 
-  ==
-::  Annotated Nock tree with subject knowledge
-+$  foot
-  $:
-    $%
-      [%1 b=*]
-      [%2 b=foot c=foot =coot]
-      [%3 b=foot]
-      [%4 b=foot]
-      [%5 b=foot c=foot]
-      [%6 b=foot c=(unit foot) d=(unit foot)]
-      [%7 b=foot c=foot]
-      [%8 b=foot c=foot]
-      [%9 b=@ c=foot =coot]
-      [%10 [b=@ c=foot] d=foot]
-      [%11 b=@ c=foot]
-      [%11 [b=@ c=foot] d=foot]
-      [%12 ref=foot path=foot]
-      [%cell p=foot q=foot]
-      [%0 b=@]
-    ==
-    $=  s  sock
-    $=  r  sock
-  ==
-::
-++  cort
-  |=  =coot
-  ^-  sock
-  ?-  -.coot
-    %dyn  [%gues ~]
-    %mis  r.foot.coot
-    %rec  [%gues ~]
-    %hit  res.coot
-    %jet  [%gues ~]
-  ==
 ++  pull
+  ::  a memoization for formula analysis, updated/inspected at eval
+  ::  boundaries (2/9)
+  =|  memo=(map [sock *] [(unit sock) (unit @tas)])
+  ::
   |=  [=jute s=sock f=*]
   ^-  [foot _memo]
   =/  labl  [s f]
@@ -496,12 +512,4 @@
     --
     (add 5 8)
   --
---
-|%
-+$  sock
-  $%
-    [%know k=*]
-    [%bets p=sock q=sock]
-    [%gues ~]
-  ==
 --
