@@ -164,11 +164,20 @@
 ++  pear
   |=  [a=sock b=sock]
   ^-  sock
-  ?:  ?=  [%know *]  a
-    ?:  ?=  [%know *]  b
-      [%know =(a b)]
+  ?.  ?&  ?=([%know *] a)
+          ?=([%know *] b)
+      ==
     [%gues ~]
-  [%gues ~]
+  [%know =(a b)]
+::
+++  deep
+  |=  a=sock
+  ?-  -.a
+    %know  [%know .?(k.a)]
+    %bets  [%know 0]
+    %gues  a
+  ==
+::
 ::  Compute what we know of a Nock formula's result
 ++  wash
   |=  [s=sock f=*]
@@ -211,22 +220,7 @@
       ::
       [%3 b=*]
     =^  bres  memo  $(f b.f)
-    :_  memo
-    ?-  bres
-        ::
-        [%know @]
-      [%know 1]
-        ::
-        [%know * *]
-      [%know 0]
-        ::
-        [%bets * *]
-      [%know 0]
-        :: maybe we want to distinguish unknown noun and unknown atom?
-        :: (bet is unknown cell...)
-        [%gues ~]
-      [%gues ~]
-    ==
+    [(deep bres) memo]
       ::
       [%4 b=*]
     =^  bres  memo  $(f b.f)
@@ -381,22 +375,7 @@
       ::
       [%3 b=*]
     =^  bfoot  memo  $(f b.f)
-    =/  r
-      ?-  r.bfoot
-          ::
-          [%know @]
-        [%know 1]
-          ::
-          [%know * *]
-        [%know 0]
-          ::
-          [%bets * *]
-        [%know 0]
-          ::
-          [%gues ~]
-        [%gues ~]
-      ==
-    [[[%3 bfoot] s r] memo]
+    [[[%3 bfoot] s (deep r.bfoot)] memo]
       ::
       [%4 b=*]
     =^  bfoot  memo  $(f b.f)
