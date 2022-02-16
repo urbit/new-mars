@@ -67,63 +67,40 @@
     `->.jets
   $(jets +.jets)
 ::  learn a noun at an address
+::
 ++  darn
   |=  [s=sock b=@ n=*]
-  ^-  sock
+  ?<  =(b 0)
+  |-  ^-  sock
   ?:  =(b 1)
     [%know n]
-  ?:  ?=  [%know *]  s
-    :-  %know
-    .*  [k.s n]  [%10 [b [0 3]] [0 2]] 
-  ?-  (cap b)
-      ::
-      %2
-    ?-  s
-        ::
-        [%gues ~]
-      [%bets p=$(b (mas b), s [%gues ~]) q=[%gues ~]]
-        ::
-        [%bets p=* q=*]
-      [%bets p=$(b (mas b), s p.s) q=q.s]
-    ==
-      ::
-      %3
-    ?-  s
-        ::
-        [%gues ~]
-      [%bets p=[%gues ~] q=$(b (mas b), s [%gues ~])]
-        ::
-        [%bets p=* q=*]
-      [%bets p=p.s q=$(b (mas b), s q.s)]
-    ==
-  ==
+  ?:  ?=([%know *] s)
+    [%know .*([k.s n] [%10 [b [%0 3]] [%0 2]])]
+  =+  [now lat]=[(cap b) (mas b)]
+  %-  both
+  ?-  -.s
+    %gues  ?-  now
+             %2  [$(b lat) s]
+             %3  [s $(b lat)]
+           ==
+    %bets  ?-  now
+             %2  [$(s p.s, b lat) q.s]
+             %3  [p.s $(s q.s, b lat)]
+  ==       ==
 ::  axis into a sock
+::
 ++  yarn
   |=  [s=sock b=@]
-  ^-  sock
   ?<  =(b 0)
-  |-
-  ?:  =(b 1)
-    s
-  ?-  s
-      ::
-      [%know *]
-    :-  %know
-    .*  k.s  [0 b]
-      ::
-      [%gues ~]
-    [%gues ~]
-      ::
-      [%bets p=* q=*]
-     ?-  (cap b)
-         ::
-         %2
-       $(b (mas b), s p.s)
-         ::
-         %3
-       $(b (mas b), s q.s)
-     ==
-  ==
+  |-  ^-  sock
+  ?:  =(b 1)  s
+  ?-  -.s
+    %know  [%know .*(k.s [%0 b])]
+    %gues  s
+    %bets  ?-  (cap b)
+             %2  $(b (mas b), s p.s)
+             %3  $(b (mas b), s q.s)
+  ==       ==
 ::  cons two socks
 ::
 ++  both
