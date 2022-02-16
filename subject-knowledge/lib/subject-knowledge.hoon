@@ -425,8 +425,7 @@
     ?.  ?=  [%know *]  f
       ~&  "Dyn: {<s>}"
       [[%dyn s] m]
-    =/  jet  (juke jute s k.f)
-    ?.  ?=  ~  jet
+    ?^  jet=(juke jute s k.f)
       ::  found a jet
       ~&  "jet: {<q.u.jet>}"
       [[%jet q.u.jet] m]
