@@ -11,46 +11,36 @@
 +$  jute
   (map * (list [sock [$-(* *) @tas]]))
 ++  bord  *jute
-::  test whether a sock nests in another sock
-::  a=sock nests in b=sock if b has the same information as a, or
-::  strictly more information
+::
+::  +mous: test whether a sock nests in another sock
+::
+::    a=sock nests in b=sock if b has the same information as a, or
+::    strictly more information
+::
 ++  mous
   |=  [a=sock b=sock]
   ^-  ?
-  |-
-  ^-  ?
-  ?:  ?=  [%gues ~]  a
-    %.y
-  ?-  a
-      ::
-      [%know *]
-    ?|
-      ?&
-        ?=  [%know *]  b
-        =(k.a k.b)
-      ==
-      ?&
-        ?=  [%bets * *]  b
-        ?=  [* *]  k.a
-        $(a [%know -.k.a], b p.b)
-        $(a [%know +.k.a], b q.b)
-      ==
-    ==
-      ::
-      [%bets * *]
-    ?|
-      ?&
-        ?=  [%know * *]  b
-        $(a p.a, b [%know -.k.b])
-        $(a q.a, b [%know +.k.b])
-      ==
-      ?&
-        ?=  [%bets * *]  b
-        $(a p.a, b p.b)
-        $(a q.a, b q.b)
-      ==
-    ==
-  ==
+  ?:  =(a b)  &
+  ?-  -.a
+    %gues  &
+  ::
+  ::  XX seems like this will only nest in the case of [b]
+  ::  being an improperly non-normalized %bets ...
+  ::
+    %know  ?&  ?=([%bets ^] b)
+               ?=(^ k.a)
+               $(a [%know -.k.a], b p.b)
+               $(a [%know +.k.a], b q.b)
+           ==
+  ::
+    %bets  ?|  ?&  ?=([%know ^] b)
+                   $(a p.a, b [%know -.k.b])
+                   $(a q.a, b [%know +.k.b])
+               ==
+               ?&  ?=([%bets *] b)
+                   $(a p.a, b p.b)
+                   $(a q.a, b q.b)
+  ==       ==  ==
 ::  Check for a jet
 ++  juke
   |=  [=jute s=sock f=*]
