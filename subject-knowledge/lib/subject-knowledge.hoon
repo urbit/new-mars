@@ -2,6 +2,7 @@
 ::  $coot: description of knowledge at a call site
 ::  $foot: annotated Nock tree with subject knowledge
 ::  $jute: a jet dashboard
+::  $memo: analysis memoization, updated/inspected at eval boundaries
 ::  $sock: partial knowledge of a noun
 ::
 +$  coot
@@ -48,6 +49,8 @@
   ==
 ::
 +$  jute  (map * (list (pair sock (pair gate @tas))))
+::
++$  memo  (map [sock *] [(unit sock) (unit @tas)])
 ::
 +$  sock
   $%  [%know k=*]
@@ -206,10 +209,7 @@
 ::
 ::  Compute what we know of a Nock formula's result
 ++  wash
-  ::  a memoization for formula analysis, updated/inspected at eval
-  ::  boundaries (2/9)
-  =|  memo=(map [sock *] [(unit sock) (unit @tas)])
-  ::
+  =|  memo=memo
   |=  [s=sock f=*]
   ^-  [sock _memo]
   |-
@@ -312,10 +312,7 @@
   ==
 ::
 ++  pull
-  ::  a memoization for formula analysis, updated/inspected at eval
-  ::  boundaries (2/9)
-  =|  memo=(map [sock *] [(unit sock) (unit @tas)])
-  ::
+  =|  memo=memo
   |=  [=jute s=sock f=*]
   ^-  [foot _memo]
   =/  labl  [s f]
