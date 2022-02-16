@@ -295,25 +295,16 @@
     $=  s  sock
     $=  r  sock
   ==
+::
 ++  cort
   |=  =coot
   ^-  sock
-  ?-  coot
-      ::
-      [%dyn *]
-    [%gues ~]
-      ::
-      [%mis *]
-    r.foot.coot
-      ::
-      [%rec *]
-    [%gues ~]
-      ::
-      [%hit *]
-    res.coot
-      ::
-      [%jet *]
-    [%gues ~]
+  ?-  -.coot
+    %dyn  [%gues ~]
+    %mis  r.foot.coot
+    %rec  [%gues ~]
+    %hit  res.coot
+    %jet  [%gues ~]
   ==
 ++  pull
   |=  [=jute s=sock f=*]
