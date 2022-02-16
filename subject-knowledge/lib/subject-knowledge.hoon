@@ -50,7 +50,7 @@
 ::
 +$  jute  (map * (list (pair sock (pair gate @tas))))
 ::
-+$  memo  (map [sock *] [(unit sock) (unit @tas)])
++$  memo  (map (pair sock *) (pair (unit sock) (unit @tas)))
 ::
 +$  sock
   $%  [%know k=*]
@@ -219,17 +219,16 @@
     ^-  [sock _memo]
     ?.  ?=  [%know *]  f
       [[%gues ~] memo]
-    =/  m  (~(get by memo) s k.f)
-    ?~  m
+    ?~  mem=(~(get by memo) s k.f)
       :: memo miss
       =.  memo  (~(put by memo) [s k.f] [~ ~])
       =^  r  memo  ^$(s s, f +.f)
       [r (~(put by memo) [s k.f] [`r ~])] 
-    ?~  -.u.m
+    ?~  p.u.mem
       ::  memo blackhole
       [[%gues ~] memo]
     ::  memo hit]
-    [u.-.u.m memo]
+    [u.p.u.mem memo]
   ?+  f  ~|(%wash-bonk !!)
       [[* *] *]
     =^  pres  memo  $(f -.f)
@@ -430,8 +429,7 @@
       ::  found a jet
       ~&  "jet: {<q.u.jet>}"
       [[%jet q.u.jet] memo]
-    =/  mem  (~(get by memo) [s k.f])
-    ?~  mem
+    ?~  mem=(~(get by memo) [s k.f])
       :: memo miss
       =.  memo  (~(put by memo) [s k.f] [~ ~]) :: blackhole for recursive eval
       =.  labl  [s k.f]
@@ -439,13 +437,13 @@
       ~&  "Miss: sock {<s>} formula {<k.f>}"
       =.  memo  (~(jab by memo) [s k.f] |=([(unit sock) nam=(unit @tas)] [`r.res nam]))
       [[%mis res] memo] :: fill in result
-    ?~  -.u.mem
+    ?~  p.u.mem
       :: memo blackhole
       ~&  "Recur: sock {<[s]>} formula {<k.f>}"
       [[%rec s k.f] memo]
     :: memo hit
-    ~&  "Hit: sock {<[s]>} formula {<k.f>} result {<u.u.mem>}"
-    [[%hit u.-.u.mem] memo]
+    ~&  "Hit: sock {<[s]>} formula {<k.f>} result {<u.p.u.mem>}"
+    [[%hit u.p.u.mem] memo]
   --
 ::  example nocks for testing
 ++  nocs
