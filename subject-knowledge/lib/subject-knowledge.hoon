@@ -124,66 +124,43 @@
        $(b (mas b), s q.s)
      ==
   ==
+::  cons two socks
+::
+++  both
+  |=  [a=sock b=sock]
+  ?:  &(?=(%know -.a) ?=(%know -.b))
+    [%know k.a k.b]
+  ::  XX is it worth preserving [%bets gues+~ gues+~]
+  ::
+  ?:  &(?=(%gues -.a) ?=(%gues -.b))
+    a
+  [%bets a b]
 ::  make a new sock from 2 socks (and an axis)
+::
 ++  knit
   |=  [s=sock b=@ t=sock]
-  ^-  sock
-  ?:  =(b 1)
-    t
-  ?-  s
-      ::
-      [%know @]
-    ~|  %know-atom  !!
-      ::
-      [%know * *]
-    ?-  (cap b)
-        ::
-        %2
-      =/  r  $(s [%know +<.s], b (mas b))
-      ?:  ?=  [%know k=*]  r
-        [%know +.r +>.s]
-      [%bets r [%know +.k.s]]
-        ::
-        %3
-      =/  r  $(s [%know +>.s], b (mas b))
-      ?:  ?=  [%know k=*]  r
-        [%know +<.s +.r]
-      [%bets [%know +<.s] r]
-    ==
-      ::
-      [%bets p=* q=*]
-    ?-  (cap b)
-        ::
-        %2
-      =/  r  $(s p.s, b (mas b))
-      ?:  ?=  [%know k=*]  r
-        ?:  ?=  [%know k=*]  q.s
-          [%know +.r +.q.s]
-        [%bets r q.s]
-      [%bets r q.s]
-        ::
-        %3
-      =/  r  $(s q.s, b (mas b))
-      ?:  ?=  [%know k=*]  r
-        ?:  ?=  [%know k=*]  p.s
-          [%know +.p.s +.r]
-        [%bets p.s r]
-      [%bets p.s r]
-    ==
-      ::
-      [%gues ~]
-    =/  r  $(b (mas b))
-    ?:  ?=  [%gues ~]  r
-      [%gues ~]
-    ?-  (cap b)
-        ::
-        %2
-      [%bets r [%gues ~]]
-        ::
-        %3
-      [%bets [%gues ~] r]
-    ==
-  ==
+  ?<  =(b 0)
+  |-  ^-  sock
+  ?:  =(b 1)  t
+  =+  [now lat]=[(cap b) (mas b)]
+  %-  both
+  ?-  -.s
+    %know  ~|  %know-atom
+           ?-  now
+             %2  [$(s [%know -.k.s], b lat) [%know +.k.s]]
+             %3  [[%know -.k.s] $(s [%know +.k.s], b lat)]
+           ==
+  ::
+    %bets  ?-  now
+             %2  [$(s p.s, b lat) q.s]
+             %3  [p.s $(s q.s, b lat)]
+           ==
+  ::
+    %gues  ?-  now
+             %2  [$(b lat) s]
+             %3  [s $(b lat)]
+  ==       ==
+::
 ++  pear
   |=  [a=sock b=sock]
   ^-  sock
@@ -219,7 +196,7 @@
       [[* *] *]
     =^  pres  memo  $(f -.f)
     =^  qres  memo  $(f +.f)
-    [(knit [%bets pres [%gues ~]] 3 qres) memo]
+    [(both pres qres) memo]
       ::
       [%0 b=@]
     [(yarn s b.f) memo]
@@ -281,7 +258,7 @@
       ::
       [%8 b=* c=*]
     =^  bres  memo  $(f b.f)
-    $(s (knit [%bets [%gues ~] s] 2 bres), f c.f)
+    $(s (both bres s), f c.f)
       ::
       [%9 b=@ c=*]
     =^  cres  memo  $(f c.f)
@@ -388,7 +365,7 @@
       [[* *] *]
     =^  pfoot  memo  $(f -.f)
     =^  qfoot  memo  $(f +.f)
-    [[[%cell pfoot qfoot] s (knit [%bets r.pfoot [%gues ~]] 3 r.qfoot)] memo]
+    [[[%cell pfoot qfoot] s (both r.pfoot r.qfoot)] memo]
       ::
       [%0 b=@]
     [[[%0 b.f] s=s r=(yarn s b.f)] memo]
@@ -461,7 +438,7 @@
       ::
       [%8 b=* c=*]
     =^  bfoot  memo  $(f b.f)
-    =^  cfoot  memo  $(s (knit [%bets [%gues ~] s] 2 r.bfoot), f c.f)
+    =^  cfoot  memo  $(s (both r.bfoot s), f c.f)
     [[[%8 bfoot cfoot] s=s r=r.cfoot] memo]
       ::
       [%9 b=@ c=*]
