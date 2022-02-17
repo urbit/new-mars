@@ -357,7 +357,7 @@
       [[[%6 bfoot `cfoot ~] s r.cfoot] m]
     ::
         [%know %1]
-      =^  dfoot  m  $(f d/f)
+      =^  dfoot  m  $(f d.f)
       [[[%6 bfoot ~ `dfoot] s r.dfoot] m]
     ::
         [%gues ~]
